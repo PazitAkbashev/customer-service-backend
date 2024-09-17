@@ -10,7 +10,8 @@ const Comment = sequelize.define('Comment', {
   },
 });
 
-Comment.belongsTo(User, { foreignKey: 'userId' });
-Comment.belongsTo(Post, { foreignKey: 'postId' });
+// Define relationships
+Comment.belongsTo(User, { foreignKey: 'userId' });  // A comment belongs to a user
+Comment.belongsTo(Post, { foreignKey: 'postId' });  // A comment belongs to a post
 
 module.exports = Comment;

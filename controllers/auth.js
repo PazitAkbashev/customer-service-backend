@@ -6,7 +6,6 @@ const User = require('../models/User');
 exports.register = async (req, res) => {
   const { username, email, password } = req.body;
 
-  
   try {
     // Check if user already exists
     const existingUser = await User.findOne({ where: { email } });
@@ -31,7 +30,11 @@ exports.register = async (req, res) => {
       email: user.email,
     });
   } catch (error) {
-    res.status(500).json({ message: 'Error registering user', error });
+    console.error('Error registering user:', error);  // Log error
+    res.status(500).json({
+      message: 'Error registering user',
+      error: error.message || error,  // Send back detailed error message
+    });
   }
 };
 
@@ -57,6 +60,10 @@ exports.login = async (req, res) => {
 
     res.json({ token });
   } catch (error) {
-    res.status(500).json({ message: 'Error logging in', error });
+    console.error('Error logging in user:', error);  // Log error
+    res.status(500).json({
+      message: 'Error logging in',
+      error: error.message || error,  // Send back detailed error message
+    });
   }
 };

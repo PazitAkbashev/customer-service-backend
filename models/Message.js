@@ -10,8 +10,9 @@ const Message = sequelize.define('Message', {
   },
 });
 
-Message.belongsTo(User, { as: 'sender', foreignKey: 'senderId' });
-Message.belongsTo(User, { as: 'recipient', foreignKey: 'recipientId' });
-Message.belongsTo(Post, { foreignKey: 'postId' });
+// Define relationships
+Message.belongsTo(User, { as: 'sender', foreignKey: 'senderId' });  // Message sender (company)
+Message.belongsTo(User, { as: 'recipient', foreignKey: 'recipientId' });  // Message recipient (user)
+Message.belongsTo(Post, { foreignKey: 'postId' });  // The post related to the message
 
 module.exports = Message;
