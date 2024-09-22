@@ -9,12 +9,11 @@ const User = require('./models/User');
 const Post = require('./models/Post');
 const Comment = require('./models/Comment');
 const Message = require('./models/Message');
-//const Message = require('./models/Message');
 
 require('dotenv').config();
 
 const app = express();
-app.use(express.json());
+app.use(express.json()); // This allows Express to parse JSON request bodies
 app.use(cors());
 
 // Use routes
