@@ -16,4 +16,18 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
+// Fetch All Posts
+router.get('/', authMiddleware, async (req, res) => {
+  try {
+    const posts = await Get.findAll();
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Error fetching posts',
+      error: error.message || error,
+    });
+  }
+});
+
+
 module.exports = router;
