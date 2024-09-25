@@ -1,3 +1,5 @@
+// routes/auth.js
+
 // מייבא את הספרייה express כדי ליצור נתיבים (routes) עבור האפליקציה
 const express = require('express');
 
@@ -12,6 +14,9 @@ const jwt = require('jsonwebtoken');
 
 // מייבא את המודל User שמייצג את טבלת המשתמשים בבסיס הנתונים
 const User = require('../models/User');
+
+// ייבוא הפונקציות מהקונטרולר
+const { getGuestToken } = require('../controllers/auth');
 
 // נתיב להתחברות משתמשים (login)
 router.post('/login', async (req, res) => {
@@ -39,6 +44,7 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 // נתיב לרישום משתמשים חדשים (register)
 router.post('/register', async (req, res) => {
   // חילוץ username, email, ו-password מגוף הבקשה
@@ -83,6 +89,19 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// נתיב להפקת טוקן אורח (guest token)
+router.get('/guest-token', (req, res) => {
+  // יצירת payload עבור טוקן האורח
+  const guestPayload = {
+    role: 'guest',
+  };
+
+  // יצירת הטוקן
+  const guestToken = jwt.sign(guestPayload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+  // החזרת הטוקן ללקוח
+  res.json({ token: guestToken });
+});
 
 // מייצא את ה-Router כדי שניתן יהיה להשתמש בו בקובץ הראשי (server.js)
 module.exports = router;

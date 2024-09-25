@@ -1,6 +1,10 @@
+// controllers/auth.js
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+
+// Register User
 exports.register = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -23,16 +27,13 @@ exports.register = async (req, res) => {
       email: user.email,
     });
   } catch (error) {
-    console.error('Error registering user:', error); // הוסף הודעה זו
+    console.error('Error registering user:', error);
     res.status(500).json({
       message: 'Error registering user',
-      error: error.message || error,  // שלח הודעת שגיאה מפורטת
+      error: error.message || error,
     });
   }
 };
-
-
-
 
 // Login User
 exports.login = async (req, res) => {
@@ -42,7 +43,7 @@ exports.login = async (req, res) => {
     // Find the user by email
     const user = await User.findOne({ where: { email } });
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials, check email' }); //return bad request
+      return res.status(401).json({ message: 'Invalid credentials, check email' });
     }
 
     // Compare the password (the hashed one with the original, by 'bcrypt')
@@ -56,10 +57,21 @@ exports.login = async (req, res) => {
 
     res.json({ token });
   } catch (error) {
-    console.error('Error logging in user:', error);  // Log error
+    console.error('Error logging in user:', error);
     res.status(500).json({
       message: 'Error logging in',
-      error: error.message || error,  // Send back detailed error message
+      error: error.message || error,
     });
   }
+};
+
+// Create a token for guests
+exports.getGuestToken = (req, res) => {
+  const guestPayload = {
+    role: 'guest',
+  };
+
+  const guestToken = jwt.sign(guestPayload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+  res.json({ token: guestToken });
 };
