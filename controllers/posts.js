@@ -4,7 +4,7 @@ const Comment = require('../models/Comment');
 // Create a Post
 exports.createPost = async (req, res) => {
   try {
-    const post = await Post.create({
+    const post = await Post.create({ //create new instance in db
       ...req.body,
       userId: req.user.id,  // Use the ID from the decoded token (authMiddleware must attach this)
     });

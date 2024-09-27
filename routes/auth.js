@@ -18,6 +18,7 @@ const User = require('../models/User');
 // ייבוא הפונקציות מהקונטרולר
 const { getGuestToken } = require('../controllers/auth');
 
+
 // נתיב להתחברות משתמשים (login)
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -41,6 +42,7 @@ router.post('/login', async (req, res) => {
 
     res.json({ token, user });
   } catch (error) {
+    console.error('Error during login:', error); // Log the actual error
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -72,7 +74,7 @@ router.post('/register', async (req, res) => {
     const newUser = await User.create({
       username,
       email, // הוספת שדה האימייל
-      password: hashedPassword,
+      password: hashedPassword, //שמירה של הסיסמא בצורה מאובטחת
     });
 
     // יצירת טוקן JWT עבור המשתמש החדש
@@ -82,7 +84,7 @@ router.post('/register', async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    // החזרת תגובה ללקוח עם הטוקן והמשתמש החדש שנוצר
+    // החזרת תגובה ללקוח עם הטוקן וכל הפרטים של המשתמש החדש שנוצר
     res.status(201).json({ token, newUser });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
