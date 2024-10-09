@@ -1,3 +1,5 @@
+// models/Comment.js
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // ייבוא מודול ה-Sequelize
 const Post = require('./Post');

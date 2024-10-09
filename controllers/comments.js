@@ -1,3 +1,5 @@
+//controllers/comments.js
+
 const Comment = require('../models/Comment');
 
 // Function to add a comment
