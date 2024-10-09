@@ -49,6 +49,7 @@ router.get('/auth/user/:id/posts', authMiddleware, async (req, res) => {
   }
 });
 
+
 // Route to like a post
 router.post('/:postId/like', authMiddleware, async (req, res) => {
   const postId = req.params.postId;

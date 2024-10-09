@@ -23,15 +23,24 @@ router.post('/', authMiddleware, async (req, res) => {
 
 // שליפת כל התגובות לפוסט מסוים
 router.get('/posts/:postId', async (req, res) => {
-    const postId = req.params.postId; // קבלת ה-ID של הפוסט
-    try {
-        const comments = await Comment.findAll({ where: { postId } }); // שליפת התגובות מהבסיס נתונים
-        res.json(comments); // שליחת התגובות
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching comments', error });
-    }
+  const postId = req.params.postId; // קבלת ה-ID של הפוסט
+  try {
+      const comments = await Comment.findAll({ where: { postId } }); // שליפת התגובות מהבסיס נתונים
+      res.json(comments); // שליחת התגובות
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching comments', error });
+  }
 });
 
+// שליפת כל התגובות
+router.get('/', async (req, res) => {
+  try {
+    const comments = await Comment.findAll(); // שליפת כל התגובות מהבסיס נתונים
+    res.json(comments); // שליחת התגובות
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching comments', error }); // טיפול בשגיאות
+  }
+});
 
 // ייצוא ה-router כך שניתן יהיה להשתמש בו בקובץ הראשי (server.js)
 module.exports = router;
