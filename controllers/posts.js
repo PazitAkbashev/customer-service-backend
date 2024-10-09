@@ -1,5 +1,5 @@
 const Post = require('../models/Post');
-const Comment = require('../models/Comment');
+const Comment = require('../models/comment');
 
 // Create a Post
 exports.createPost = async (req, res) => {
@@ -54,13 +54,13 @@ exports.likePost = async (req, res) => {
 exports.addComment = async (req, res) => {
   try {
     const comment = await Comment.create({
-      body: req.body.body,
-      postId: req.params.postId,
-      userId: req.user.id,  // The ID from the decoded token (authMiddleware must attach this)
+      body: req.body.body,  // תוכן התגובה מהבקשה
+      postId: req.params.postId,  // מזהה הפוסט
+      userId: req.user.id,  // המזהה מהטוקן
     });
-    res.status(201).json(comment);
+    res.status(201).json(comment);  // מחזיר את התגובה שנוצרה
   } catch (error) {
-    console.error('Error adding comment:', error);  // Log error
+    console.error('Error adding comment:', error);  // רושם שגיאה
     res.status(500).json({
       message: 'Error adding comment',
       error: error.message || error,
