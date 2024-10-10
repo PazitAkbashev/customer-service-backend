@@ -39,16 +39,7 @@ app.get('/api/auth/guest-token', (req, res) => {
   res.json({ token });  // שליחת הטוקן כתשובה
 });
 
-// Posts route
-app.get('/api/posts', async (req, res) => {
-  try {
-    const posts = await Post.findAll();  // שליפת כל הפוסטים מבסיס הנתונים
-    res.json(posts);  // שליחת הפוסטים כתשובה
-  } catch (err) {
-    console.error('Error fetching posts:', err);
-    res.status(500).json({ error: 'Failed to fetch posts.' });  // טיפול בשגיאות
-  }
-});
+
 
 // Use routes for authentication
 app.use('/api/auth', authRoutes);

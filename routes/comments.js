@@ -32,13 +32,19 @@ router.get('/posts/:postId', async (req, res) => {
   }
 });
 
-// שליפת כל התגובות
+// נתיב להחזרת כל התגובות
 router.get('/', async (req, res) => {
   try {
-    const comments = await Comment.findAll(); // שליפת כל התגובות מהבסיס נתונים
-    res.json(comments); // שליחת התגובות
+    // שליפת כל התגובות מבסיס הנתונים
+    const comments = await Comment.findAll();
+    
+    // החזרת התגובות כ-JSON
+    res.json(comments);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching comments', error }); // טיפול בשגיאות
+    res.status(500).json({
+      message: 'Error fetching posts',
+      error: error.message || error,
+    });
   }
 });
 
