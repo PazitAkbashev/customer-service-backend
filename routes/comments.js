@@ -5,21 +5,28 @@ const Comment = require('../models/Comment'); // ייבוא המודל של הת
 const authMiddleware = require('../middleware/authMiddleware'); // ייבוא המידלו של האימות
 const router = express.Router();
 
-// יצירת תגובה חדשה (Protected Route)
+// יצירת פוסט חדש (Protected Route)
 router.post('/', authMiddleware, async (req, res) => {
   try {
-    const body = " nn ";
-    const postId = 1;
-    const comment = await Comment.create({
+    const { title, body } = req.body; // קבלת הכותרת והגוף מהבקשה
+
+    // בדוק אם הכותרת והגוף נמסרו
+    if (!title || !body) {
+      return res.status(400).json({ message: 'Title and body are required.' });
+    }
+
+    const post = await Post.create({
+      title,
       body,
-      postId, // Add the ID of the post being commented on
+      userId: req.user.id // ה-ID של המשתמש שיצר את הפוסט (אם יש אימות)
     });
-    res.status(201).json(comment); // Return the created comment
+
+    res.status(201).json(post); // החזרת הפוסט שנוצר
   } catch (error) {
-    res.status(500).json({ message: 'Error creating comment', error }); // Error handling
+    console.error('Error creating post:', error);
+    res.status(500).json({ message: 'Error creating post', error }); // טיפול בשגיאות
   }
 });
-
 
 // שליפת כל התגובות לפוסט מסוים
 router.get('/posts/:postId', async (req, res) => {
