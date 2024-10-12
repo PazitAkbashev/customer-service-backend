@@ -5,26 +5,26 @@ const Comment = require('../models/Comment'); // ייבוא המודל של הת
 const authMiddleware = require('../middleware/authMiddleware'); // ייבוא המידלו של האימות
 const router = express.Router();
 
-// יצירת פוסט חדש (Protected Route)
+// יצירת תגובה חדשה (Protected Route)
 router.post('/', authMiddleware, async (req, res) => {
   try {
-    const { title, body } = req.body; // קבלת הכותרת והגוף מהבקשה
+    const { body, postId } = req.body; // קבלת גוף התגובה וה-ID של הפוסט מהבקשה
 
-    // בדוק אם הכותרת והגוף נמסרו
-    if (!title || !body) {
-      return res.status(400).json({ message: 'Title and body are required.' });
+    // בדוק אם הגוף נמסר
+    if (!body || !postId) {
+      return res.status(400).json({ message: 'Body and postId are required.' });
     }
 
-    const post = await Post.create({
-      title,
+    const comment = await Comment.create({
       body,
-      userId: req.user.id // ה-ID של המשתמש שיצר את הפוסט (אם יש אימות)
+      userId: req.user.id, // ה-ID של המשתמש שיצר את התגובה (אם יש אימות)
+      postId // הוספת ה-ID של הפוסט
     });
 
-    res.status(201).json(post); // החזרת הפוסט שנוצר
+    res.status(201).json(comment); // החזרת התגובה שנוצרה
   } catch (error) {
-    console.error('Error creating post:', error);
-    res.status(500).json({ message: 'Error creating post', error }); // טיפול בשגיאות
+    console.error('Error creating comment:', error);
+    res.status(500).json({ message: 'Error creating comment', error }); // טיפול בשגיאות
   }
 });
 
@@ -32,10 +32,10 @@ router.post('/', authMiddleware, async (req, res) => {
 router.get('/posts/:postId', async (req, res) => {
   const postId = req.params.postId; // קבלת ה-ID של הפוסט
   try {
-      const comments = await Comment.findAll({ where: { postId } }); // שליפת התגובות מהבסיס נתונים
-      res.json(comments); // שליחת התגובות
+    const comments = await Comment.findAll({ where: { postId } }); // שליפת התגובות מהבסיס נתונים
+    res.json(comments); // שליחת התגובות
   } catch (error) {
-      res.status(500).json({ message: 'Error fetching comments', error });
+    res.status(500).json({ message: 'Error fetching comments', error });
   }
 });
 
@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
     res.json(comments);
   } catch (error) {
     res.status(500).json({
-      message: 'Error fetching posts',
+      message: 'Error fetching comments',
       error: error.message || error,
     });
   }
@@ -57,4 +57,3 @@ router.get('/', async (req, res) => {
 
 // ייצוא ה-router כך שניתן יהיה להשתמש בו בקובץ הראשי (server.js)
 module.exports = router;
-
