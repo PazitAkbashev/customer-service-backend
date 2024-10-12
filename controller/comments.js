@@ -1,4 +1,4 @@
-// routes/comments.js
+// controller/comments.js
 
 const express = require('express');
 const Comment = require('../models/Comment'); // ייבוא המודל של התגובות

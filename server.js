@@ -2,9 +2,9 @@
 const express = require('express');  // Framework עבור Node.js לבניית אפליקציות web
 const cors = require('cors');  // Middleware לאפשר בקשות cross-origin
 const sequelize = require('./config/db');  // ORM להתחברות וניהול בסיס הנתונים
-const authRoutes = require('./routes/auth');  // נתיבים לאימות משתמשים
-const postRoutes = require('./routes/posts');  // נתיבים לניהול פוסטים
-const commentsRoutes = require('./routes/comments');  // נתיבים לניהול תגובות
+const authController = require('./controller/auth');  // נתיבים לאימות משתמשים
+const postController = require('./controller/posts');  // נתיבים לניהול פוסטים
+const commentsController = require('./controller/comments');  // נתיבים לניהול תגובות
 const bodyParser = require('body-parser');  // Middleware לפירוש גוף הבקשה
 const jwt = require('jsonwebtoken');  // ספריה ליצירת וניהול JSON Web Tokens
 const authenticateToken = require('./middleware/authMiddleware');  // Middleware לאימות טוקנים
@@ -41,17 +41,17 @@ app.get('/api/auth/guest-token', (req, res) => {
 
 
 
-// Use routes for authentication
-app.use('/api/auth', authRoutes);
-console.log("Auth routes loaded at /api/auth");  // לוג לאחר טעינת הנתיב של האימות
+// Use Controller for authentication
+app.use('/api/auth', authController);
+console.log("Auth Controller loaded at /api/auth");  // לוג לאחר טעינת הנתיב של האימות
 
-// Use routes for posts with authentication
-app.use('/api/posts', authenticateToken, postRoutes);  // הוספת אימות לנתיבי הפוסטים
-console.log("Post routes loaded at /api/posts");  // לוג לאחר טעינת הנתיב של הפוסטים
+// Use  for posts with authentication
+app.use('/api/posts', authenticateToken, postController);  // הוספת אימות לנתיבי הפוסטים
+console.log("Post Controller loaded at /api/posts");  // לוג לאחר טעינת הנתיב של הפוסטים
 
-// Use comments routes with authentication
-app.use('/api/comments', authenticateToken, commentsRoutes);  // שימוש בנתיבי התגובות
-console.log("Comment routes loaded at /api/comments");  // לוג לאחר טעינת הנתיב של התגובות
+// Use comments Controller with authentication
+app.use('/api/comments', authenticateToken, commentsController);  // שימוש בנתיבי התגובות
+console.log("Comment Controller loaded at /api/comments");  // לוג לאחר טעינת הנתיב של התגובות
 
 // Sync models with the database
 sequelize.sync({ force: false })  // סנכרון המודלים עם בסיס הנתונים (ללא מחיקת טבלאות קיימות)

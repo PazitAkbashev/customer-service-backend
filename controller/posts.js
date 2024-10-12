@@ -1,4 +1,4 @@
-// routes/posts.js
+// controller/posts.js
 
 const express = require('express');
 const Post = require('../models/Post');

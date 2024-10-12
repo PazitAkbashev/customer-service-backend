@@ -1,9 +1,7 @@
-// routes/auth.js
+// controller/auth.js
 
-// מייבא את הספרייה express כדי ליצור נתיבים (routes) עבור האפליקציה
 const express = require('express');
 
-// יוצר מופע חדש של Router של Express, המאפשר להגדיר נתיבים (routes) מבודדים
 const router = express.Router();
 
 // מייבא את הספרייה bcrypt המשמשת להצפנת סיסמאות והשוואתן בצורה מאובטחת
@@ -14,9 +12,6 @@ const jwt = require('jsonwebtoken');
 
 // מייבא את המודל User שמייצג את טבלת המשתמשים בבסיס הנתונים
 const User = require('../models/User');
-
-// ייבוא הפונקציות מהקונטרולר
-const { getGuestToken } = require('../controllers/auth');
 
 // נתיב להתחברות משתמשים (login)
 router.post('/login', async (req, res) => {

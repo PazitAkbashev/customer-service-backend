@@ -2,7 +2,6 @@
 
 const jwt = require('jsonwebtoken');
 
-// Middleware to protect routes
 const authMiddleware = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1]; // חילוץ הטוקן מהכותרת
     if (!token) {
